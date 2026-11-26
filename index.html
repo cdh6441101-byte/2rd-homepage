@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>동네로그 - AI·코딩 실전 강의</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --text:#1f2430; --muted:#6b7280; --line:#e5e7eb; --nav:#ffffff;
+  --purple1:#a010f5; --purple2:#7010b8; --yellow:#ffc800; --ink:#111827;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#0f1117; --text:#e8eaf0; --muted:#9aa1b0; --line:#262b38; --nav:#151822; --ink:#f3f4f6; color-scheme: dark; }
+}
+:root[data-theme="dark"]{ --bg:#0f1117; --text:#e8eaf0; --muted:#9aa1b0; --line:#262b38; --nav:#151822; --ink:#f3f4f6; color-scheme: dark; }
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Noto Sans KR',system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;line-height:1.5}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+
+/* nav */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--nav);border-bottom:1px solid var(--line)}
+.nav{max-width:1280px;margin:0 auto;height:76px;display:flex;align-items:center;gap:8px;padding:0 24px}
+.logo{display:flex;align-items:center;margin-right:20px;font-weight:900;font-size:30px;letter-spacing:-1px;color:#4a1a8c}
+.logo i{display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--yellow);margin-left:3px;margin-top:14px}
+:root[data-theme="dark"] .logo{color:#c9a4ff}
+.menu{display:flex;gap:6px;flex:1}
+.menu a,.menu button{font:500 15px 'Noto Sans KR',sans-serif;color:var(--text);background:none;border:0;padding:10px 18px;cursor:pointer;border-radius:8px}
+.menu a:hover,.menu button:hover{background:rgba(127,127,127,.12)}
+.right{display:flex;align-items:center;gap:8px}
+.right a,.right button{font:500 15px 'Noto Sans KR',sans-serif;background:none;border:0;color:var(--text);padding:10px 14px;cursor:pointer;border-radius:8px}
+.dd{position:relative}
+.dd-list{display:none;position:absolute;top:100%;left:0;min-width:180px;background:var(--nav);border:1px solid var(--line);border-radius:10px;padding:6px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+.dd.open .dd-list{display:block}
+.dd-list a{display:block;padding:9px 12px;font-size:14px;border-radius:6px}
+
+/* hero */
+.hero{background:linear-gradient(180deg,var(--purple1),var(--purple2));color:#fff;text-align:center;padding:76px 20px 84px}
+.hero .eyebrow{font-size:17px;font-weight:700;margin:0 0 22px}
+.hero h1{font-size:clamp(34px,5vw,50px);line-height:1.3;margin:0 0 26px;font-weight:900;letter-spacing:-1px}
+.hero p.sub{font-size:19px;line-height:1.55;margin:0 0 34px;opacity:.95}
+.btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-block;font:700 17px 'Noto Sans KR',sans-serif;padding:16px 32px;border-radius:8px;border:2px solid transparent;cursor:pointer}
+.btn.y{background:var(--yellow);color:#2a1d00}
+.btn.o{background:transparent;color:#fff;border-color:#fff}
+.btn:hover{filter:brightness(1.07)}
+
+/* courses */
+.wrap{max-width:1280px;margin:0 auto;padding:52px 24px 80px}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:22px}
+.sec-head h2{margin:0;font-size:28px;font-weight:900;color:var(--ink)}
+.sec-head p{margin:4px 0 0;font-size:14px;color:var(--muted)}
+.ctrl{display:flex;align-items:center;gap:12px}
+.ctrl a{font-size:15px}
+.arrow{width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:var(--bg);color:var(--text);font-size:20px;cursor:pointer}
+.arrow:hover{background:rgba(127,127,127,.12)}
+.track{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 66px)/4);gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:6px}
+.track::-webkit-scrollbar{display:none}
+.card{scroll-snap-align:start;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column}
+.thumb{aspect-ratio:16/10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;gap:8px;font-weight:900;line-height:1.3}
+.thumb b{color:#ffe600;font-size:22px;text-shadow:0 2px 0 #000}
+.thumb span{color:#fff;font-size:17px}
+.t1{background:#000}
+.t1 .toe{width:70px;height:44px;border-radius:50% 50% 40% 40%;background:#c98a62;position:relative}
+.t1 .toe::after{content:"";position:absolute;left:50%;top:30%;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:#ffd400}
+.t2{background:linear-gradient(135deg,#1b0f4a,#5b1d9a 55%,#1f2a6b);border-bottom:3px solid var(--yellow)}
+.t2 .lang{display:flex;gap:18px;font-size:15px;color:#c9c3e6;text-decoration:line-through;text-decoration-color:#ff2b2b;text-decoration-thickness:3px}
+.t2 .lang em{font-style:normal}
+.t2 b{background:#000;padding:4px 10px;color:#ffe600;font-size:19px;display:inline-block;margin:2px 0;text-shadow:none}
+.t3{background:#1e232b}
+.t3 .brand{color:#4c9bff;font-size:24px}
+.t3 b{font-size:22px}
+.t3 small{color:#d6dae2;font-size:12px;font-weight:500}
+.t4{background:linear-gradient(135deg,#0d3a6b,#0a1f45)}
+.t4 .tag{align-self:flex-start;background:#000;color:#ffe600;font-size:13px;padding:3px 10px;border-radius:4px}
+.t4 .py{display:flex;align-items:center;gap:12px}
+.t4 .logo2{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,#3b82c4 50%,#ffd43b 50%)}
+.t4 b{font-size:24px}
+.cbody{padding:14px 16px 18px}
+.cbody h3{margin:0 0 6px;font-size:16px;line-height:1.4;color:var(--ink)}
+.cbody p{margin:0;font-size:13px;color:var(--muted)}
+.tagrow{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.tagrow span{font-size:12px;padding:3px 9px;border-radius:999px;background:rgba(160,16,245,.1);color:#8a1fd6}
+:root[data-theme="dark"] .tagrow span{color:#d8a8ff}
+
+footer{border-top:1px solid var(--line);padding:34px 24px;text-align:center;font-size:13px;color:var(--muted)}
+
+@media (max-width:1000px){
+  .track{grid-auto-columns:calc((100% - 22px)/2)}
+  .menu a,.menu button{padding:10px 10px}
+}
+@media (max-width:720px){
+  .nav{height:auto;flex-wrap:wrap;padding:10px 14px;gap:4px}
+  .menu{order:3;flex-basis:100%;overflow-x:auto}
+  .menu a,.menu button{white-space:nowrap;font-size:14px}
+  .logo{margin-right:auto}
+  .hero{padding:52px 18px 60px}
+  .hero p.sub{font-size:16px}
+  .track{grid-auto-columns:82%}
+  .arrow{display:none}
+}
+@media (prefers-reduced-motion: reduce){ .track{scroll-behavior:auto} }
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <a class="logo" href="https://jocoding.net/" target="_blank" rel="noopener noreferrer" aria-label="동네로그 홈">동네로그<i></i></a>
+    <nav class="menu" aria-label="주요 메뉴">
+      <a href="https://blog.naver.com/dongnelog" target="_blank" rel="noopener noreferrer">동네로그 소개</a>
+      <a href="https://jocoding.net/courses/" target="_blank" rel="noopener noreferrer">강의</a>
+      <a href="https://jocoding.net/macbookguyver/" target="_blank" rel="noopener noreferrer">맥북가이버</a>
+      <div class="dd" id="eco">
+        <button type="button" aria-expanded="false" aria-haspopup="true">동네로그 생태계 <span aria-hidden="true">⌄</span></button>
+        <div class="dd-list">
+          <a href="https://jocoding.io/" target="_blank" rel="noopener noreferrer">동네로그 프로덕트 공장</a>
+          <a href="https://jocohunt.com/" target="_blank" rel="noopener noreferrer">동네로그 빌더 커뮤니티</a>
+          <a href="https://jocodingax.ai/" target="_blank" rel="noopener noreferrer">동네로그AX파트너스</a>
+        </div>
+      </div>
+      <a href="https://careers.jocoding.net/" target="_blank" rel="noopener noreferrer">채용</a>
+      <a href="https://jocoding.net/contact/" target="_blank" rel="noopener noreferrer">문의</a>
+    </nav>
+    <div class="right">
+      <a href="https://jocoding.net/my-courses/" target="_blank" rel="noopener noreferrer">마이페이지</a>
+      <button type="button" id="theme" aria-label="화면 모드 전환">☀</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" id="about">
+    <p class="eyebrow">AI·코딩 크리에이터 동네로그(DongneLog)</p>
+    <h1>동네로그와 함께 배우는<br>AI·코딩 실전 강의</h1>
+    <p class="sub">비전공자도 부담 없이 무료로 시작해보세요<br>파이썬, 웹·앱 개발, 바이브 코딩과 AI 수익형 프로젝트까지</p>
+    <div class="btns">
+      <a class="btn y" href="https://jocoding.net/courses/" target="_blank" rel="noopener noreferrer">무료로 시작하기</a>
+      <a class="btn o" href="https://www.youtube.com/@jocoding/join" target="_blank" rel="noopener noreferrer">멤버십 혜택 보기</a>
+    </div>
+  </section>
+
+  <section class="wrap" id="courses">
+    <div class="sec-head">
+      <div>
+        <h2>인기 강의</h2>
+        <p>모든 강의 무료 시작 가능</p>
+      </div>
+      <div class="ctrl">
+        <a href="https://jocoding.net/courses/" target="_blank" rel="noopener noreferrer">모두보기</a>
+        <button class="arrow" type="button" id="prev" aria-label="이전 강의">‹</button>
+        <button class="arrow" type="button" id="next" aria-label="다음 강의">›</button>
+      </div>
+    </div>
+
+    <div class="track" id="track">
+      <a class="card" href="https://claude.ai/artifact/Ms1e9WS9hWybLfFzmCFhER" target="_blank" rel="noopener noreferrer">
+        <div class="thumb t1"><b>Lotto 대박번호 자동 추천</b><span>버튼 한 번에 5게임</span><span style="font-size:40px;line-height:1">🍀</span></div>
+        <div class="cbody"><h3>Lotto 대박번호 자동 추천</h3><p>행운의 번호 5게임을 자동으로 추천</p><div class="tagrow"><span>로또</span><span>번호 추천</span></div></div>
+      </a>
+      <a class="card" href="https://jocoding.net/courses/web-programming-full-stack/" target="_blank" rel="noopener noreferrer">
+        <div class="thumb t2">
+          <div class="lang"><em>C</em><em>Java</em><em>Python</em></div>
+          <b>시대가 바뀌었습니다</b><b>코딩, 가장 먼저</b><b>‘이것’부터 공부하세요</b>
+        </div>
+        <div class="cbody"><h3>코딩, 가장 먼저 ‘이것’부터 공부하세요</h3><p>AI 시대의 코딩 공부 순서</p><div class="tagrow"><span>입문</span><span>AI</span></div></div>
+      </a>
+      <a class="card" href="https://jocoding.net/courses/mini-app-dev/" target="_blank" rel="noopener noreferrer">
+        <div class="thumb t3"><span class="brand">apps in toss</span><b>수익형 미니앱 ‘딸깍’ 런칭</b><small>기획 / 디자인 / 개발 / 수익화 / 마케팅 포함</small></div>
+        <div class="cbody"><h3>수익형 미니앱 ‘딸깍’ 런칭</h3><p>토스 앱인토스로 미니앱 출시하기</p><div class="tagrow"><span>수익화</span><span>미니앱</span></div></div>
+      </a>
+      <a class="card" href="https://jocoding.net/courses/python-basic/" target="_blank" rel="noopener noreferrer">
+        <div class="thumb t4"><span class="tag">2024 최신</span><div class="py"><div class="logo2"></div><b>점프 투 파이썬</b></div><span>파이썬 기초 - 통합본 -</span></div>
+        <div class="cbody"><h3>점프 투 파이썬 기초 통합본</h3><p>2024 최신 파이썬 입문 강의</p><div class="tagrow"><span>파이썬</span><span>기초</span></div></div>
+      </a>
+      <a class="card" href="https://jocoding.net/courses/mcp-ai-integration/" target="_blank" rel="noopener noreferrer">
+        <div class="thumb t3" style="background:#16301f"><b>MCP로 AI 완전 정복</b><span>MCP 영상 하나로 끝내기</span></div>
+        <div class="cbody"><h3>MCP로 AI 완전 정복</h3><p>MCP 개념, 활용, 제작 방법까지</p><div class="tagrow"><span>MCP</span><span>AI</span></div></div>
+      </a>
+      <a class="card" href="https://jocoding.net/courses/gpt-bitcoin-trading/" target="_blank" rel="noopener noreferrer">
+        <div class="thumb t1" style="background:#2b1544"><b>GPT 비트코인 투자 자동화</b><span>AI 자동매매 에이전트 만들기</span></div>
+        <div class="cbody"><h3>AI 비트코인 투자 자동화</h3><p>GPT에게 맡기는 AI 자동매매 에이전트 만들기</p><div class="tagrow"><span>GPT</span><span>자동매매</span></div></div>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">© 동네로그(DongneLog)</footer>
+
+<script>
+(function(){
+  var track=document.getElementById('track');
+  function step(){var c=track.querySelector('.card');return c?c.getBoundingClientRect().width+22:300;}
+  document.getElementById('next').onclick=function(){track.scrollBy({left:step(),behavior:'smooth'});};
+  document.getElementById('prev').onclick=function(){track.scrollBy({left:-step(),behavior:'smooth'});};
+
+  var eco=document.getElementById('eco'),btn=eco.querySelector('button');
+  btn.onclick=function(e){e.stopPropagation();var o=eco.classList.toggle('open');btn.setAttribute('aria-expanded',o);};
+  document.addEventListener('click',function(){eco.classList.remove('open');btn.setAttribute('aria-expanded','false');});
+
+  var root=document.documentElement,tbtn=document.getElementById('theme');
+  function dark(){return root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);}
+  function sync(){tbtn.textContent=dark()?'☾':'☀';}
+  tbtn.onclick=function(){root.setAttribute('data-theme',dark()?'light':'dark');sync();};
+  sync();
+})();
+</script>
+</body>
+</html>
